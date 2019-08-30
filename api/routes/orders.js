@@ -1,35 +1,16 @@
 const express = require('express');
-const router = express();
+const router = express.Router();
+const checkAuth = require('../middleware/check-auth');
 
-router.get('/', (req, res, next) => {
-    res.status(200).json({
-        message: 'Orders were fetched!'
-    });
-});
+const OrdersController = require('../controllers/orders');
 
-router.post('/', (req, res, next) => {
-    const order = {
-        productid: req.body.productId,
-        quantity: req.body.quantity
-    }
-    res.status(201).json({
-        message: 'Orders were created!',
-        order: order
-    });
-});
 
-router.get('/:orderId', (req, res, next) => {
-    res.status(200).json({
-        message: 'Orders details.',
-        orderId: req.params.orderId
-    });
-});
+router.get('/', checkAuth, OrdersController.orders_get_all);
 
-router.delete('/:orderId', (req, res, next) => {
-    res.status(200).json({
-        message: 'Orders deleted.',
-        orderId: req.params.orderId
-    });
-});
+router.post('/', checkAuth, OrdersController.orders_create_order);
+
+router.get('/:orderId', checkAuth, OrdersController.orders_get_order);
+
+router.delete('/:orderId', checkAuth, OrdersController.orders_delete_order);
 
 module.exports = router;
