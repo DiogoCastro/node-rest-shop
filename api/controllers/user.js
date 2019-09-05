@@ -49,13 +49,13 @@ exports.user_login = (req, res, next) => {
     .then(user => {
         if(user.length < 1) {
             return res.status(401).json({
-                message: 'Auth failed'
+                message: 'This user doesn\'t exist'
             });
         }
         bcrypt.compare(req.body.password, user[0].password, (err, result) => {
             if (err) {
                 return res.status(401).json({
-                    message: 'Auth failed'
+                    message: 'Wrong password'
                 });
             }
             if (result) {
